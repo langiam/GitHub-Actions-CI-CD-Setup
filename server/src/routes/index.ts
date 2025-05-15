@@ -1,26 +1,30 @@
 import type { Request, Response, NextFunction } from 'express';
 import express from 'express';
-const router = express.Router();
-
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getRandomQuestions } from './api/index.js';  // ← our controller
+
+const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import apiRoutes from './api/index.js';
 
-// Disable caching for the random question API
-router.use(
+// GET /api/questions/random → returns an ARRAY of 10 questions
+router.get(
   '/api/questions/random',
   (_req: Request, res: Response, next: NextFunction) => {
+    // disable HTTP caching for this endpoint
     res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate');
     next();
-  }
+  },
+  getRandomQuestions
 );
 
-// Mount API routes
-router.use('/api', apiRoutes);
+// (If you have other API routes, you can mount them here under /api)
+// e.g. router.use('/api/users', userRoutes);
 
-// Serve React front-end in production
+//
+// Serve React’s index.html for all other routes:
+//
 router.use((_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
