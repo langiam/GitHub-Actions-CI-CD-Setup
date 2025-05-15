@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "seed": "node dist/seeds/seed.js",
+    "preseed": "npm run build",
+    "seed": "tsx src/seeds/seed.ts",
     "start": "node dist/server.js",
     "watch": "nodemon dist/server.js",
     "test": "vitest"
@@ -24,6 +25,7 @@
     "dotenv": "^16.4.5",
     "msw": "^2.3.1",
     "nodemon": "^3.1.0",
+    "tsx": "^4.19.4",
     "typescript": "^5.4.5",
     "vitest": "^2.0.1"
   }
